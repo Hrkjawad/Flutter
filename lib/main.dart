@@ -1,111 +1,73 @@
+
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MyApp());
+void main(){
+  runApp(Myapp());
 }
+class Myapp extends StatelessWidget {
+  const Myapp({super.key});
 
-class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: true,
-      home: HomeScreen(),
-      title: 'Assignment APP',
+      home: HomePage(),
     );
   }
 }
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
 
-class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text("Button Practice"),
         centerTitle: true,
-        title: Text('Photo Gallery'),
+        backgroundColor: Colors.lightBlue,
+        actions: [
+          IconButton(onPressed: (){
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                  content: Text("Pressed"),
+                backgroundColor: Colors.lightBlue,
+              )
+            );
+          }, icon: Icon(Icons.dehaze_sharp))
+        ],
       ),
-      body: SingleChildScrollView(
+      body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'Welcome to My Photo Gallery!',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-
-            SizedBox(
-              height: 25,
-            ),
-
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: 'Search for photos...',
-                  border: OutlineInputBorder(),
-                ),
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(onPressed: (){
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Button Pressed!'),
+                      backgroundColor: Colors.blue,
+                    ),
+                  );
+                }, child: Icon(Icons.messenger)),
               ),
             ),
-
-            GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3),
-                shrinkWrap: true,
-                itemCount: 6,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text('Photo $index clicked !!'),
-                      ));
-                    },
-                    child: Column(children: [
-                      Image.network(
-                        'https://as1.ftcdn.net/v2/jpg/00/28/08/40/1000_F_28084010_bGRJetPfBwNcO3YuRC2C3Pz7qASocWQ4.jpg',
-                        height: 100,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          'Photo $index',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ]),
-                  );
-                }),
-
-            ListView.builder(
-                shrinkWrap: true,
-                itemCount: 3,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    leading: CircleAvatar(
-                      radius: 20,
-                      backgroundImage: NetworkImage(
-                          'https://as1.ftcdn.net/v2/jpg/00/28/08/40/1000_F_28084010_bGRJetPfBwNcO3YuRC2C3Pz7qASocWQ4.jpg'),
-                    ),
-                    title: Text('Photo ${index + 1}'),
-                    subtitle: Text('Description for Photo ${index + 1}'),
-                  );
-                }),
-
             Container(
-              decoration:
-              BoxDecoration(shape: BoxShape.circle, color: Colors.blue),
-              child: IconButton(
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text('Photos Uploaded Successfully!'),
-                  ));
-                },
-                icon: Icon(
-                  Icons.upload,
-                  color: Colors.white,
-                ),
-              ),
-            )
+              width: double.infinity,
+                padding: EdgeInsets.all(16.0),
+                child: TextButton(
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      iconColor: Colors.white
+                    ),
+
+                    onPressed: (){}, child: Icon(Icons.call)))
           ],
         ),
-      ),
+      )
+
+
     );
   }
 }
