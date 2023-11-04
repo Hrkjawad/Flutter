@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;//i paste (http: ^0.13.3) in pubspec.yaml and save it
+import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 void main() {
