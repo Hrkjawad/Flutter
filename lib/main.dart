@@ -1,130 +1,110 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;//i paste (http: ^0.13.3) in pubspec.yaml and save it
-import 'dart:convert';
 
 void main() {
-  runApp(Mod11_assignment());
+  runApp(MyApp());
 }
 
-class Mod11_assignment extends StatelessWidget {
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: PhotoList(),
+      debugShowCheckedModeBanner: true,
+      home: HomeScreen(),
+      title: 'Assignment APP',
     );
   }
 }
 
-class Photo {
-  final int id;
-  final String title,thumbnailUrl;
-
-  Photo({
-    required this.id,
-    required this.title,
-    required this.thumbnailUrl,
-  });
-}
-
-class PhotoList extends StatefulWidget {
-  @override
-  PhotoListState createState() => PhotoListState();
-}
-
-class PhotoListState extends State<PhotoList> {
-  final String apiUrl = 'https://jsonplaceholder.typicode.com/photos';
-  List<Photo> photos = [];
-
-  Future<void> fetchPhotos() async {
-    try {
-      final response = await http.get(Uri.parse(apiUrl));
-      if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
-        setState(() {
-          photos = data.map((photo) => Photo(
-            id: photo['id'],
-            title: photo['title'],
-            thumbnailUrl: photo['thumbnailUrl'],
-          )).toList();
-        });
-      } else {
-        throw Exception('Sorry it Failed to fetch photos from net');
-      }
-    } catch (e) {
-      throw Exception('Error: $e');
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    fetchPhotos();
-  }
-
+class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Photo Gallery App'),
+        centerTitle: true,
+        title: Text('Photo Gallery'),
       ),
-      body: photos.isEmpty
-          ? Center(child: CircularProgressIndicator())
-          : ListView.builder(
-        itemCount: photos.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            leading: Image.network(photos[index].thumbnailUrl),
-            title: Text(photos[index].title),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PhotoDetail(photos: photos[index]),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Text(
+              'Welcome to My Photo Gallery!',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+
+            SizedBox(
+              height: 28,
+            ),
+
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: 'Search for photos...',
+                  border: OutlineInputBorder(),
                 ),
-              );
-            },
-          );
-        },
-      ),
-    );
-  }
-}
-
-class PhotoDetail extends StatelessWidget {
-  final Photo photos;
-
-  PhotoDetail({required this.photos});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Photo Detail'),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.network(
-            photos.thumbnailUrl,
-            width: 300,
-            height: 300,
-            fit: BoxFit.cover,
-          ),
-          Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Text(
-              'Title: ${photos.title}',
-              style: TextStyle(fontSize: 14),
+              ),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Text(
-              'ID: ${photos.id}',
-              style: TextStyle(fontSize: 16),
-            ),
-          ),
-        ],
+
+            GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3),
+                shrinkWrap: true,
+                itemCount: 6,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text('Photo $index clicked !!'),
+                      ));
+                    },
+                    child: Column(children: [
+                      Image.network(
+                        'https://as1.ftcdn.net/v2/jpg/00/28/08/40/1000_F_28084010_bGRJetPfBwNcO3YuRC2C3Pz7qASocWQ4.jpg',
+                        height: 80,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Photo $index',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ]),
+                  );
+                }),
+
+            ListView.builder(
+                shrinkWrap: true,
+                itemCount: 3,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    leading: CircleAvatar(
+                      radius: 20,
+                      backgroundImage: NetworkImage(
+                          'https://as1.ftcdn.net/v2/jpg/00/28/08/40/1000_F_28084010_bGRJetPfBwNcO3YuRC2C3Pz7qASocWQ4.jpg'),
+                    ),
+                    title: Text('Photo ${index + 1}'),
+                    subtitle: Text('Description for Photo ${index + 1}'),
+                  );
+                }),
+
+            Container(
+              decoration:
+              BoxDecoration(shape: BoxShape.circle, color: Colors.blue),
+              child: IconButton(
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text('Photos Uploaded Successfully!'),
+                  ));
+                },
+                icon: Icon(
+                  Icons.upload,
+                  color: Colors.white,
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
