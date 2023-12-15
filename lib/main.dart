@@ -1,15 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_task/MatchDetails.dart';
-import 'package:firebase_task/firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -51,7 +48,10 @@ class MyApp extends StatelessWidget {
                       final QueryDocumentSnapshot item =
                           snapshot.data!.docs[index];
                       return ListTile(
-                        title: Text(item['Team1'] + ' Vs ' + item['Team2']),
+                        title: Text(
+                          item['Team1'] + ' Vs ' + item['Team2'],
+                          style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w500),
+                        ),
                         onTap: () {
                           Get.to(MatchDetails(
                             matchName: item['MatchName'],
