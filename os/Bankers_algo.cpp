@@ -51,13 +51,13 @@ int main()
         available[j] = totalInstances[j] - totalAllocation;
     }
 
-    int finished[process], finalSafeSequence[process], index = 0;
+    int finished[process], finalSafeSequence[process],
+        index = 0;
 
     for (int k = 0; k < process; k++)
     {
         finished[k] = 0;
     }
-
     int need[process][resource];
 
     for (int i = 0; i < process; i++)
